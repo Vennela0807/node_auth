@@ -1,7 +1,6 @@
 const jwt = require('jsonwebtoken');
-const config = require('../config/config');
 const User = require('../model/user');
-
+require('dotenv').config();
 
 exports.authenticate = async (req, res, next) => {
   let token;
@@ -12,7 +11,7 @@ exports.authenticate = async (req, res, next) => {
   }
  
   try {
-    const decoded = await jwt.verify(token, config.secretKey);
+    const decoded = await jwt.verify(token, `${process.env.SECRET_KEY}`);
     const user =  await User.findById(decoded.userId);
     if (!user){
       return res.status(401).json({ message: 'User does not exist' });
